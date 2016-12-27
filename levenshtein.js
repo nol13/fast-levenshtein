@@ -26,7 +26,11 @@
      */
     get: function(str1, str2, options) {
       var useCollator = (options && collator && options.useCollator);
-      
+
+      var subcost = (options && options.subcost && typeof options.subcost === "number") ? options.subcost : 1;
+      var inscost = (options && options.inscost && typeof options.inscost === "number") ? options.inscost : 1;
+      var delcost = (options && options.delcost && typeof options.delcost === "number") ? options.delcost : 1;
+
       var str1Len = str1.length,
         str2Len = str2.length;
       
@@ -56,15 +60,15 @@
             // substution
             strCmp = 0 === collator.compare(str1.charAt(i), String.fromCharCode(str2Char[j]));
 
-            nextCol = prevRow[j] + (strCmp ? 0 : 1);
+            nextCol = prevRow[j] + (strCmp ? 0 : subcost);
 
             // insertion
-            tmp = curCol + 1;
+            tmp = curCol + inscost;
             if (nextCol > tmp) {
               nextCol = tmp;
             }
             // deletion
-            tmp = prevRow[j + 1] + 1;
+            tmp = prevRow[j + 1] + delcost;
             if (nextCol > tmp) {
               nextCol = tmp;
             }
@@ -88,15 +92,15 @@
             // substution
             strCmp = str1.charCodeAt(i) === str2Char[j];
 
-            nextCol = prevRow[j] + (strCmp ? 0 : 1);
+            nextCol = prevRow[j] + (strCmp ? 0 : subcost);
 
             // insertion
-            tmp = curCol + 1;
+            tmp = curCol + inscost;
             if (nextCol > tmp) {
               nextCol = tmp;
             }
             // deletion
-            tmp = prevRow[j + 1] + 1;
+            tmp = prevRow[j + 1] + delcost;
             if (nextCol > tmp) {
               nextCol = tmp;
             }
